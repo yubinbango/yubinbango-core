@@ -1,0 +1,5 @@
+.DS_Store
+node_modules
+npm-debug.log
+tsconfig.json
+yubinbango-core-src.*
