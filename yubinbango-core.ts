@@ -22,7 +22,11 @@ module YubinBango {
         let c:string = b.join('');
         let yubin7: string = this.chk7(c);
         // 7桁の数字の時のみ作動
-        if (yubin7) { this.getAddr(yubin7, callback); }
+        if (yubin7) {
+          this.getAddr(yubin7, callback);
+        } else {
+          return callback(null);
+        }
       }
     }
     chk7(val: string) {
@@ -31,7 +35,7 @@ module YubinBango {
       }
     }
     selectAddr(youbin7: string, addr: string[]) {
-      if (addr[0] && addr[1]) {
+      if (addr && addr[0] && addr[1]) {
         return {
           'region_id': addr[0],
           'region': this.REGION[addr[0]],
@@ -39,6 +43,8 @@ module YubinBango {
           'street': addr[2],
           'extended': addr[3]
         };
+      } else {
+        return null;
       }
     }
     jsonp(url: string, fn) {
