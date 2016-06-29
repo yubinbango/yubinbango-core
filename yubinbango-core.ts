@@ -62,7 +62,7 @@ module YubinBango {
     getAddr(yubin7: string, fn):{[key:string]: string} {
       const yubin3 = yubin7.substr(0, 3);
       // 郵便番号上位3桁でキャッシュデータを確認
-      if (typeof CACHE[yubin3] !== undefined) {
+      if (yubin3 in CACHE && yubin7 in CACHE[yubin3]) {
         return fn(this.selectAddr(CACHE[yubin3][yubin7]));
       } else {
         this.jsonp(`${this.URL}/${yubin3}.js`, (data) => {
