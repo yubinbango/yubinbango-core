@@ -17,10 +17,10 @@ module YubinBango {
     constructor(inputVal: string = '', callback?) {
       if(inputVal){
         // 全角の数字を半角に変換 ハイフンが入っていても数字のみの抽出
-        let a:string = inputVal.replace(/[０-９]/g, (s: string) => String.fromCharCode(s.charCodeAt(0) - 65248));
-        let b:RegExpMatchArray = a.match(/\d/g);
-        let c:string = b.join('');
-        let yubin7: string = this.chk7(c);
+        const a:string = inputVal.replace(/[０-９]/g, (s: string) => String.fromCharCode(s.charCodeAt(0) - 65248));
+        const b:RegExpMatchArray = a.match(/\d/g);
+        const c:string = b.join('');
+        const yubin7: string = this.chk7(c);
         // 7桁の数字の時のみ作動
         if (yubin7) {
           this.getAddr(yubin7, callback);
@@ -49,14 +49,14 @@ module YubinBango {
     }
     jsonp(url: string, fn) {
       window['$yubin'] = (data) => fn(data);
-      let scriptTag = document.createElement("script");
+      const scriptTag = document.createElement("script");
       scriptTag.setAttribute("type", "text/javascript");
       scriptTag.setAttribute("charset", "UTF-8");
       scriptTag.setAttribute("src", url);
       document.head.appendChild(scriptTag);
     }
     getAddr(yubin7: string, fn) {
-      let yubin3 = yubin7.substr(0, 3);
+      const yubin3 = yubin7.substr(0, 3);
       if (this.cachecheck(yubin7, yubin3)) {
         fn(this.selectAddr(yubin7, CACHE[yubin3][yubin7]));
       } else {
