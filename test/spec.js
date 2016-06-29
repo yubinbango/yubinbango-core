@@ -15,7 +15,7 @@ describe('yubinbango-core', () => {
         expect(addr.extended).toEqual('１丁目２－１');
       });
     });
-    it('間違った7桁の数字を与えると住所を返す', () => {
+    it('間違った7桁の数字を与えるとエラーメッセージを返す', () => {
       browser.executeAsyncScript(() => {
         const callback = arguments[arguments.length - 1];
         const yubin7 = '9999999';
