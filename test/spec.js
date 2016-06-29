@@ -15,4 +15,13 @@ describe('yubinbango-core', () => {
         expect(addr.extended).toEqual('１丁目２－１');
       });
     });
+    it('間違った7桁の数字を与えると住所を返す', () => {
+      browser.executeAsyncScript(() => {
+        const callback = arguments[arguments.length - 1];
+        const yubin7 = '9999999';
+        new YubinBango.Core(yubin7, addr => {callback(addr)});
+      }).catch(e => {
+        expect(e.message).toEqual("無効な郵便番号です");
+      });
+    });
 });

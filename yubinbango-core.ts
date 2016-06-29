@@ -24,8 +24,6 @@ module YubinBango {
         // 7桁の数字の時のみ作動
         if (yubin7) {
           this.getAddr(yubin7, callback);
-        } else {
-          return callback(null);
         }
       }
     }
@@ -34,7 +32,7 @@ module YubinBango {
         return val;
       }
     }
-    selectAddr(youbin7: string, addr: string[]) {
+    selectAddr(addr: string[]):{[key:string]: string} {
       if (addr && addr[0] && addr[1]) {
         return {
           'region_id': addr[0],
@@ -44,7 +42,13 @@ module YubinBango {
           'extended': addr[3]
         };
       } else {
-        return null;
+        return {
+          'region_id': '',
+          'region': '',
+          'locality': '',
+          'street': '',
+          'extended': ''
+        };
       }
     }
     jsonp(url: string, fn) {
@@ -55,20 +59,20 @@ module YubinBango {
       scriptTag.setAttribute("src", url);
       document.head.appendChild(scriptTag);
     }
-    getAddr(yubin7: string, fn) {
+    getAddr(yubin7: string, fn):{[key:string]: string} {
       const yubin3 = yubin7.substr(0, 3);
-      if (this.cachecheck(yubin7, yubin3)) {
-        fn(this.selectAddr(yubin7, CACHE[yubin3][yubin7]));
+      // 郵便番号上位3桁でキャッシュデータを確認
+      if (typeof CACHE[yubin3] !== undefined) {
+        return fn(this.selectAddr(CACHE[yubin3][yubin7]));
       } else {
         this.jsonp(`${this.URL}/${yubin3}.js`, (data) => {
+          if (typeof data === "undefined"){
+            throw new Error("無効な郵便番号です");
+          }
           CACHE[yubin3] = data;
-          fn(this.selectAddr(yubin7, data[yubin7]));
+          return fn(this.selectAddr(data[yubin7]));
         });
       }
-    }
-    // 郵便番号上位3桁でキャッシュデータを確認
-    cachecheck(yubin7: string, yubin3: string) {
-      if (CACHE[yubin3]) return true;
     }
   }
 }
