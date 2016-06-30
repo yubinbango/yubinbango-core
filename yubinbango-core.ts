@@ -24,6 +24,14 @@ module YubinBango {
         // 7桁の数字の時のみ作動
         if (yubin7) {
           this.getAddr(yubin7, callback);
+        } else {
+          callback({
+            'region_id': '',
+            'region': '',
+            'locality': '',
+            'street': '',
+            'extended': ''
+          });
         }
       }
     }
@@ -66,9 +74,6 @@ module YubinBango {
         return fn(this.selectAddr(CACHE[yubin3][yubin7]));
       } else {
         this.jsonp(`${this.URL}/${yubin3}.js`, (data) => {
-          if (typeof data === "undefined"){
-            throw new Error("無効な郵便番号です");
-          }
           CACHE[yubin3] = data;
           return fn(this.selectAddr(data[yubin7]));
         });
