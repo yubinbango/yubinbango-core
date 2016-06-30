@@ -25,13 +25,7 @@ module YubinBango {
         if (yubin7) {
           this.getAddr(yubin7, callback);
         } else {
-          callback({
-            'region_id': '',
-            'region': '',
-            'locality': '',
-            'street': '',
-            'extended': ''
-          });
+          callback(this.addrDic());
         }
       }
     }
@@ -40,23 +34,20 @@ module YubinBango {
         return val;
       }
     }
+    addrDic(region_id = '', region = '', locality = '', street = '', extended = ''):{[key:string]: string} {
+      return {
+        'region_id': region_id,
+        'region': region,
+        'locality': locality,
+        'street': street,
+        'extended': extended
+      };
+    }
     selectAddr(addr: string[]):{[key:string]: string} {
       if (addr && addr[0] && addr[1]) {
-        return {
-          'region_id': addr[0],
-          'region': this.REGION[addr[0]],
-          'locality': addr[1],
-          'street': addr[2],
-          'extended': addr[3]
-        };
+        return this.addrDic(addr[0],this.REGION[addr[0]],addr[1],addr[2],addr[3])
       } else {
-        return {
-          'region_id': '',
-          'region': '',
-          'locality': '',
-          'street': '',
-          'extended': ''
-        };
+        return this.addrDic()
       }
     }
     jsonp(url: string, fn) {
